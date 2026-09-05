@@ -1,0 +1,882 @@
+:root {
+  --brand: #0f766e;
+  --brand-dark: #0f3d39;
+  --brand-soft: #ecfdf5;
+  --accent: #f59e0b;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --surface: #f8fafc;
+  --card: var(--white);
+  --white: #ffffff;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.18);
+  --shadow-sm: 0 4px 14px -8px rgba(15, 23, 42, 0.25);
+  --maxw: 1140px;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-dark); }
+.btn-accent { background: var(--accent); color: #1f2937; }
+.btn-ghost { background: transparent; color: var(--brand); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--brand); }
+.btn-block { width: 100%; justify-content: center; }
+
+/* ---------- Link & button variants ----------
+   Driven by <html data-links> and <html data-buttons>, which the root layout
+   sets from the Site settings record so the admin can restyle the whole site
+   from one panel. */
+/* Links: how anchors are emphasised across the site.
+   Scoped to a:not(.btn) so these theme rules don't repaint buttons
+   (e.g. .btn-primary) — a bare `a` selector here would outrank .btn-primary
+   and turn every primary button's text the brand colour. */
+html[data-links="hover"] a:not(.btn) { color: var(--brand); text-decoration: none; }
+html[data-links="hover"] a:not(.btn):hover { text-decoration: underline; }
+html[data-links="always"] a:not(.btn) { color: var(--brand); text-decoration: underline; }
+html[data-links="none"] a:not(.btn) { color: var(--brand); text-decoration: none; }
+html[data-links="none"] a:not(.btn):hover { text-decoration: none; }
+
+/* Link & menu hover colour: a single, site-wide accent for the pointer/hover
+   state of every text link — content, footer, and the nav menu. Driven by the
+   --link-hover variable the root layout sets from the Site settings record. */
+html a:not(.btn):hover { color: var(--link-hover, var(--brand)); }
+
+/* Buttons: primary button treatment. */
+html[data-buttons="soft"] .btn-primary {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+html[data-buttons="soft"] .btn-primary:hover {
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+}
+html[data-buttons="outline"] .btn-primary {
+  background: transparent;
+  color: var(--brand);
+  border-color: var(--brand);
+}
+html[data-buttons="outline"] .btn-primary:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg, rgba(255, 255, 255, 0.9));
+  color: var(--header-fg, var(--ink));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 66px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--header-fg, var(--ink));
+}
+.brand-logo { height: 34px; width: auto; border-radius: 8px; object-fit: contain; }
+.brand .dot {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--brand); color: #fff;
+  display: grid; place-items: center; font-weight: 800;
+}
+/* ===== Primary navigation ===== */
+.nav { display: flex; gap: 2px; align-items: center; }
+
+.nav-group { position: relative; }
+
+/* Top-level links — soft pill with hover/active highlight */
+.nav a:not(.btn) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1;
+  color: var(--header-fg, var(--ink));
+  transition: color 0.18s ease, background 0.18s ease;
+}
+.nav a:not(.btn):hover {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+.nav a.active {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+/* Caret on parents (pure CSS triangle that rotates when the menu opens) */
+.nav-group > a.has-sub::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  opacity: 0.65;
+}
+.nav-group:hover > a.has-sub::after,
+.nav-group:focus-within > a.has-sub::after {
+  transform: rotate(225deg);
+  opacity: 1;
+}
+
+/* ===== Dropdown submenu ===== */
+.submenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  min-width: 224px;
+  padding: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 20px 44px -14px rgba(15, 23, 42, 0.25);
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+/* Small pointer that connects the panel to its parent item */
+.submenu::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 24px;
+  width: 12px;
+  height: 12px;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+.nav-group:hover .submenu,
+.nav-group:focus-within .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Submenu items — roomy rows with a subtle slide-in accent on hover */
+.site-header .nav .submenu a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
+}
+.site-header .nav .submenu a:hover {
+  background: var(--brand-soft);
+  color: var(--brand);
+  padding-left: 16px;
+}
+.site-header .nav .submenu a.active {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+.nav-toggle { display: none; }
+/* Header CTA ("Get in touch"): always a solid filled button with white text,
+   overriding both the .nav link coloring and the global button theme variant
+   (soft/outline) which would otherwise paint the text the brand colour. */
+.site-header .nav .btn-primary,
+.site-header .nav .btn-primary:hover {
+  color: #fff;
+  background: var(--brand);
+}
+.site-header .nav .btn-primary:hover { background: var(--brand-dark); }
+
+/* ---------- Hero / Cover ---------- */
+.hero {
+  position: relative;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(600px 300px at 85% 10%, rgba(245,158,11,0.35), transparent),
+    radial-gradient(500px 400px at 10% 90%, rgba(255,255,255,0.10), transparent);
+  pointer-events: none;
+}
+/* Compact band: enough breathing room to read as a banner, short enough that it
+   doesn't push the rest of the page below the fold. */
+.hero .inner { position: relative; z-index: 1; padding: 52px 20px 56px; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); }
+.hero p { font-size: 1.1rem; max-width: 60ch; color: rgba(255,255,255,0.9); }
+.hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+
+.cover {
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+  min-height: clamp(360px, 56vh, 600px);
+  display: flex;
+  align-items: center;
+}
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cover .scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.25), rgba(15,23,42,0.78));
+}
+.cover .inner { position: relative; z-index: 1; width: 100%; padding: 96px 20px 88px; }
+.cover h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+.cover p { font-size: 1.08rem; max-width: 62ch; color: rgba(255,255,255,0.92); }
+.cover .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.cover .eyebrow {
+  display: inline-block;
+  background: var(--accent);
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* ---------- Hero carousel ---------- */
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  background: var(--brand-dark);
+}
+.hero-track {
+  display: flex;
+  transition: transform 0.6s ease;
+  will-change: transform;
+}
+.hero-slide {
+  position: relative;
+  flex: 0 0 100%;
+  /* Compact, professional banner height — tall enough for the imagery to read,
+     short enough that the next section is already in view. */
+  min-height: clamp(340px, 54vh, 520px);
+  display: flex;
+  align-items: flex-end;
+}
+.hero-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-slide--gradient {
+  background: linear-gradient(135deg, var(--brand-dark), var(--brand));
+}
+.hero-slide--gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(600px 300px at 85% 10%, rgba(245,158,11,0.35), transparent),
+    radial-gradient(500px 400px at 10% 90%, rgba(255,255,255,0.10), transparent);
+  pointer-events: none;
+}
+.hero-slide-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15,13,35,0.85) 0%,
+    rgba(15,13,35,0.35) 45%,
+    rgba(15,13,35,0.15) 100%
+  );
+}
+.hero-slide-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  /* Bottom padding only needs to clear the dots row, hence the drop from 92px. */
+  padding: 20px 20px 56px;
+  max-width: 720px;
+}
+.hero-slide-content .eyebrow {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  margin-bottom: 8px;
+}
+.hero-slide-content h1 {
+  color: #fff;
+  font-size: clamp(1.7rem, 3.6vw, 2.7rem);
+  line-height: 1.12;
+  margin: 0 0 0.32em;
+}
+.hero-slide-content p {
+  color: rgba(255,255,255,0.88);
+  font-size: 1rem;
+  max-width: 56ch;
+  margin: 0 0 1rem;
+}
+.hero-slide-content .actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.hero-arrow:hover { background: rgba(255,255,255,0.32); transform: translateY(-50%) scale(1.06); }
+.hero-arrow--prev { left: 16px; }
+.hero-arrow--next { right: 16px; }
+.hero-dots {
+  position: absolute;
+  z-index: 3;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.hero-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255,255,255,0.45);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.hero-dot.is-active { background: #fff; transform: scale(1.25); }
+/* Motion-sensitive users: show the active slide without the sliding animation. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-track { transition: none; }
+  .hero-arrow:hover { transform: translateY(-50%); }
+}
+
+/* ---------- Sections ---------- */
+.section { padding: 64px 0; }
+.section.alt { background: var(--surface); }
+.section-head { max-width: 60ch; margin-bottom: 36px; }
+.section-head .eyebrow {
+  color: var(--brand);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+.section-head h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.section-head p { color: var(--muted); }
+
+/* ---------- Grids ---------- */
+.grid { display: grid; gap: 22px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-auto { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex; flex-direction: column;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.card .media { aspect-ratio: 16 / 10; background: var(--brand-soft); }
+.card .media img { width: 100%; height: 100%; object-fit: cover; }
+.card .body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.card .tag {
+  align-self: flex-start;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand); background: var(--brand-soft);
+  padding: 4px 10px; border-radius: 999px;
+}
+.card h3 { font-size: 1.15rem; margin: 0; }
+.card p { color: var(--muted); font-size: 0.95rem; margin: 0; }
+.card .meta { margin-top: auto; color: var(--muted); font-size: 0.85rem; display: flex; gap: 14px; flex-wrap: wrap; }
+.card .more { color: var(--brand); font-weight: 700; font-size: 0.9rem; }
+
+/* feature card */
+.feature {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow-sm);
+}
+.feature .ico {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--brand-soft); color: var(--brand);
+  display: grid; place-items: center; font-size: 1.6rem;
+  margin-bottom: 14px;
+}
+.feature h3 { font-size: 1.1rem; }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.stat {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+}
+.stat .value { font-size: 2.2rem; font-weight: 800; color: var(--brand); }
+.stat .label { color: var(--muted); font-weight: 600; }
+.stat .hint { font-size: 0.8rem; color: var(--muted); }
+
+/* testimonial */
+.quote {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 22px 24px;
+}
+.quote p { font-size: 1.02rem; }
+.quote .who { font-weight: 700; }
+.quote .role { color: var(--muted); font-size: 0.88rem; }
+
+/* ---------- Contact ---------- */
+.contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: start; }
+.info-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.info-list li { display: flex; gap: 12px; align-items: flex-start; }
+.info-list .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; flex: none; }
+.form {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow-sm);
+}
+.field { margin-bottom: 16px; }
+.field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 11px 13px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  font: inherit; color: var(--ink); background: var(--surface);
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none; border-color: var(--brand); background: #fff;
+}
+.field textarea { min-height: 120px; resize: vertical; }
+.form .ok { color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; }
+.form .err { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--brand-dark); color: rgba(255,255,255,0.85); padding: 54px 0 26px; }
+.site-footer h4 { color: #fff; font-size: 1rem; }
+.site-footer a { color: rgba(255,255,255,0.8); }
+.site-footer a:hover { color: #fff; }
+.footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 28px; }
+.footer-grid ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); margin-top: 34px; padding-top: 18px; font-size: 0.85rem; color: rgba(255,255,255,0.6); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.socials { display: flex; gap: 10px; margin-top: 12px; }
+.socials a { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.1); display: grid; place-items: center; font-weight: 700; font-size: 0.8rem; }
+/* Social icons: keep the icon visible on hover. The global link-hover rule
+   already paints the glyph with --link-hover, so the chip here is only a faint
+   tint of that same colour — never a solid fill that would cover the icon. */
+.socials a:hover { background: color-mix(in srgb, var(--link-hover, var(--accent)) 16%, transparent); color: var(--link-hover, var(--accent)); }
+.socials a svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+
+/* Light-background variant (e.g. the Contact page). The default .socials chips
+   use a translucent white tint that only reads on the dark footer, so on light
+   surfaces we use a branded chip instead. */
+.socials.socials-light a {
+  background: var(--brand-soft);
+  color: var(--brand);
+  border: 1px solid var(--line);
+}
+.socials.socials-light a:hover {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+/* Google Maps embed shown in the footer. */
+.footer-map {
+  margin-top: 22px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.footer-map iframe {
+  width: 100%;
+  height: 220px;
+  border: 0;
+  display: block;
+  filter: grayscale(0.15);
+}
+
+/* ---------- Glassmorphism ----------
+   Enabled via <html data-glass="true"> (set from Site settings). Best over an
+   image or gradient background — cards/sections turn translucent and blurred. */
+html[data-glass="true"] .feature,
+html[data-glass="true"] .card,
+html[data-glass="true"] .stat,
+html[data-glass="true"] .quote,
+html[data-glass="true"] .form,
+html[data-glass="true"] .panel {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+html[data-glass="true"] .section.alt { background: rgba(255, 255, 255, 0.35); }
+
+/* ---------- Misc ---------- */
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+.pill-open { background: #ecfdf5; color: #047857; }
+.pill-upcoming { background: #eff6ff; color: #1d4ed8; }
+.pill-closed { background: #fef2f2; color: #b91c1c; }
+.pill-past { background: #f1f5f9; color: #64748b; }
+
+.list-check { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.list-check li { display: flex; gap: 10px; align-items: flex-start; }
+.list-check .tick { color: var(--brand); font-weight: 800; }
+
+.prose { max-width: 70ch; }
+.prose p { color: #334155; }
+
+.lead { font-size: 1.15rem; color: var(--muted); }
+
+.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
+
+.not-found { text-align: center; padding: 120px 0; }
+.not-found .code { font-size: 5rem; font-weight: 900; color: var(--brand); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .grid-3, .grid-4, .stats { grid-template-columns: repeat(2, 1fr); }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .nav {
+    position: absolute; top: 66px; left: 0; right: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    flex-direction: column; align-items: stretch;
+    padding: 10px 12px; gap: 2px;
+    display: none;
+  }
+  .nav.open { display: flex; }
+  .nav a:not(.btn) { padding: 12px 14px; }
+  .nav-group { width: 100%; }
+  .nav-group > a { width: 100%; justify-content: space-between; }
+  /* On phones the dropdown expands inline as an accordion and is always shown */
+  .submenu {
+    position: static;
+    box-shadow: none;
+    border: 0;
+    border-left: 2px solid var(--line);
+    border-radius: 0;
+    padding: 2px 0 4px 12px;
+    margin: 2px 0 6px;
+    min-width: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    display: grid;
+    gap: 2px;
+  }
+  .site-header .nav .submenu a { padding: 10px 12px; border-radius: 8px; }
+  .site-header .nav .submenu a:hover { padding-left: 16px; }
+  .nav-toggle {
+    display: inline-grid; place-items: center;
+    width: 42px; height: 42px; border: 1px solid var(--line);
+    border-radius: 10px; background: #fff; cursor: pointer; font-size: 1.2rem;
+  }
+  .grid-2, .grid-3, .grid-4, .stats, .footer-grid { grid-template-columns: 1fr; }
+  /* Hero banners: comfortable gutters on phones; trim the large desktop
+     vertical padding so the banner isn't excessively tall on small screens. */
+  .cover .inner { padding: 72px 22px 60px; }
+  .hero .inner { padding: 38px 22px 42px; }
+  /* Carousel: shorter slides + tighter copy block so the banner and the first
+     content section both fit on a phone screen. */
+  .hero-slide { min-height: clamp(300px, 56vh, 420px); }
+  .hero-slide-content { padding: 18px 22px 50px; }
+  .hero-slide-content h1 { font-size: clamp(1.5rem, 6.4vw, 2rem); }
+  .hero-arrow { width: 38px; height: 38px; font-size: 1.4rem; }
+  .hero-arrow--prev { left: 10px; }
+  .hero-arrow--next { right: 10px; }
+}
+
+/* ---------- Compact page blocks ----------
+   Non-section blocks (CTA banners, standalone heroes) are wrapped by
+   PageRenderer; keep the vertical breathing room modest so the page reads as one
+   continuous layout instead of a stack of boxes. */
+.block-gap { padding: 10px 20px; }
+
+/* Gallery lightbox (src/components/GalleryGrid.tsx) */
+@keyframes lbFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lbPop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Hover affordance: tells the user the thumbnail opens fullscreen. */
+.gallery-thumb { position: relative; }
+.gallery-thumb .expand-badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 12, 20, 0.38);
+  color: #fff;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.gallery-thumb button:hover .expand-badge,
+.gallery-thumb button:focus-visible .expand-badge { opacity: 1; }
+
+/* Thumbnail strip inside the lightbox for direct navigation. */
+.lb-thumbs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 4px 16px 18px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.lb-thumbs button {
+  flex: 0 0 auto;
+  width: 58px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+.lb-thumbs button:hover { opacity: 0.85; }
+.lb-thumbs button.active { border-color: #fff; opacity: 1; }
+.lb-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- Site-wide gallery strip (src/components/GalleryStrip.tsx) ----------
+   Auto-scrolling photo marquee shown above the footer on every public page.
+   Photos come from the main gallery collection. */
+.gallery-strip {
+  padding: 44px 0 48px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+.strip-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.strip-head .section-head { margin-bottom: 0; }
+.strip-head h2 { font-size: clamp(1.35rem, 2.6vw, 1.9rem); margin: 0; }
+
+.strip-viewport {
+  position: relative;
+  overflow: hidden;
+  /* Feathered edges so photos enter and leave instead of being cut off. */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+.strip-track {
+  display: flex;
+  /* Spacing via margin (not `gap`) so the duplicated half of the track lines up
+     exactly with the first half — that's what makes the -50% loop seamless. */
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+  width: max-content;
+}
+.strip-track.is-looping {
+  animation-name: strip-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.strip-track.is-static { justify-content: center; width: 100%; }
+/* Let visitors read a photo: pause on hover and while a thumb has focus. */
+.strip-viewport:hover .strip-track,
+.strip-viewport:focus-within .strip-track { animation-play-state: paused; }
+
+@keyframes strip-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.strip-item { flex: 0 0 auto; width: clamp(190px, 24vw, 280px); margin-right: 16px; }
+.strip-item button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.strip-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  transition: transform 0.4s ease;
+}
+.strip-item button:hover img,
+.strip-item button:focus-visible img { transform: scale(1.06); }
+.strip-item-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px 12px 10px;
+  text-align: left;
+  color: #fff;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  background: linear-gradient(transparent, rgba(6, 12, 20, 0.82));
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.strip-item button:hover .strip-item-label,
+.strip-item button:focus-visible .strip-item-label { opacity: 1; }
+.strip-item-label strong { display: block; font-weight: 600; }
+.strip-item-label em {
+  font-style: normal;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .gallery-strip { padding: 34px 0 38px; }
+  .strip-head { align-items: flex-start; }
+  .strip-item { width: 68vw; }
+  .strip-item-label { opacity: 1; }
+}
+
+/* Motion-sensitive visitors keep a manual, scrollable strip. */
+@media (prefers-reduced-motion: reduce) {
+  .strip-track.is-looping { animation: none; }
+  .strip-viewport { overflow-x: auto; }
+  .strip-item img { transition: none; }
+  /* The duplicate copy only exists to make the loop seamless — drop it when
+     there's no animation, otherwise every photo appears twice. */
+  .strip-item[aria-hidden="true"] { display: none; }
+}

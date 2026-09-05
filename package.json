@@ -1,0 +1,30 @@
+{
+  "name": "nscpl-portal-simple",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A clean, lightweight public portal for NSCPL Private Limited — Next.js (App Router) CMS that runs on Postgres (Vercel/Neon) in production and SQLite (better-sqlite3) for local development, via one shared storage adapter.",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:plain": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "next": "^15.1.0",
+    "postgres": "^3.4.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

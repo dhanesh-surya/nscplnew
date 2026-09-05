@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="NSCPL">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f3d39"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0.85" cy="0.15" r="0.6">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect width="1200" height="675" fill="url(#r)"/>
+  <circle cx="600" cy="300" r="150" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="6"/>
+  <circle cx="600" cy="300" r="110" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3"/>
+  <text x="600" y="330" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="120" font-weight="800" fill="#f59e0b" letter-spacing="6">NSCPL</text>
+  <text x="600" y="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" fill="#ffffff" fill-opacity="0.82" letter-spacing="3">SPORTS &amp; EVENTS</text>
+</svg>

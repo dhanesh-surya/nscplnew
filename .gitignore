@@ -1,0 +1,43 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# runtime content store (seeded from src/data on first run)
+/content/store.json
+
+# production database (SQLite via better-sqlite3; seeded on first run)
+/data/
+*.db
+*.db-shm
+*.db-wal
+
+# uploaded admin media (runtime, not committed)
+/public/uploads/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local dev scratch (server logs, ad-hoc HTML verification dumps)
+*.log
+home_check.html
