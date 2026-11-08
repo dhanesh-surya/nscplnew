@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import os from "os";
 import path from "path";
 
 import type {
@@ -124,7 +125,14 @@ const defaultHeroes: HeroBanner[] = [
   },
 ];
 
-const DB_PATH = path.join(process.cwd(), "data", "portal.db");
+function getDbPath(): string {
+  if (process.env.SQLITE_DB_PATH) return process.env.SQLITE_DB_PATH;
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return path.join(os.tmpdir(), "portal.db");
+  }
+  return path.join(process.cwd(), "data", "portal.db");
+}
+
 const SEED_PATH = path.join(process.cwd(), "content", "store.json");
 
 /**
@@ -148,9 +156,21 @@ function getAdapter(): Promise<StoreAdapter> {
   if (!adapterPromise) {
     adapterPromise = (async () => {
       const pgUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-      const adapter = pgUrl
-        ? await createPgAdapter(pgUrl)
-        : await createSqliteAdapter();
+      if (pgUrl) {
+        try {
+          const adapter = await createPgAdapter(pgUrl);
+          await bootstrap(adapter);
+          return adapter;
+        } catch (err) {
+          console.error("[storage] Failed to connect to Postgres:", err);
+        }
+      }
+      if (process.env.VERCEL) {
+        console.warn(
+          "[storage] WARNING: POSTGRES_URL or DATABASE_URL is not set on Vercel. Set POSTGRES_URL in Vercel Project Settings > Environment Variables for persistent data."
+        );
+      }
+      const adapter = await createSqliteAdapter();
       await bootstrap(adapter);
       return adapter;
     })();
@@ -163,6 +183,46 @@ async function bootstrap(d: StoreAdapter): Promise<void> {
   await seedIfEmpty(d);
   await ensureSystemPages(d);
   await ensureSiteDefaults(d);
+}
+
+/* ----------------------- In-memory adapter (fallback) ----------------------- */
+function createMemoryAdapter(): StoreAdapter {
+  const map = new Map<string, string>();
+  return {
+    async init() {},
+    async allRows() {
+      const rows: { collection: string; id: string; data: string }[] = [];
+      for (const [key, data] of map.entries()) {
+        const idx = key.indexOf(":");
+        rows.push({
+          collection: key.slice(0, idx),
+          id: key.slice(idx + 1),
+          data,
+        });
+      }
+      return rows;
+    },
+    async getRow(collection, id) {
+      const data = map.get(`${collection}:${id}`);
+      return data ? { data } : undefined;
+    },
+    async insertRow(collection, id, data) {
+      const key = `${collection}:${id}`;
+      if (!map.has(key)) map.set(key, data);
+    },
+    async upsertRow(collection, id, data) {
+      map.set(`${collection}:${id}`, data);
+    },
+    async updateRow(collection, id, data) {
+      map.set(`${collection}:${id}`, data);
+    },
+    async deleteRow(collection, id) {
+      map.delete(`${collection}:${id}`);
+    },
+    async countRows() {
+      return map.size;
+    },
+  };
 }
 
 /* ----------------------- Postgres adapter ----------------------- */
@@ -223,73 +283,85 @@ async function createPgAdapter(url: string): Promise<StoreAdapter> {
 
 /* ----------------------- SQLite adapter ----------------------- */
 async function createSqliteAdapter(): Promise<StoreAdapter> {
-  const Database = (await import("better-sqlite3")).default;
-  // Ensure the data directory exists (gitignored; not committed).
-  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-  const db = new Database(DB_PATH);
-  // WAL improves concurrent read/write behaviour and avoids locking the whole
-  // file during writes.
-  db.pragma("journal_mode = WAL");
-  return {
-    init() {
-      db.exec(`
-        CREATE TABLE IF NOT EXISTS items (
-          collection TEXT NOT NULL,
-          id          TEXT NOT NULL,
-          data        TEXT NOT NULL,
-          PRIMARY KEY (collection, id)
+  const dbPath = getDbPath();
+  try {
+    const Database = (await import("better-sqlite3")).default;
+    const dir = path.dirname(dbPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    const db = new Database(dbPath);
+    // WAL improves concurrent read/write behaviour and avoids locking the whole
+    // file during writes.
+    try {
+      db.pragma("journal_mode = WAL");
+    } catch {
+      // Ignore if pragma fails in restricted filesystem
+    }
+    return {
+      init() {
+        db.exec(`
+          CREATE TABLE IF NOT EXISTS items (
+            collection TEXT NOT NULL,
+            id          TEXT NOT NULL,
+            data        TEXT NOT NULL,
+            PRIMARY KEY (collection, id)
+          );
+        `);
+        return Promise.resolve();
+      },
+      allRows() {
+        return Promise.resolve(
+          db
+            .prepare("SELECT collection, id, data FROM items")
+            .all() as { collection: string; id: string; data: string }[]
         );
-      `);
-      return Promise.resolve();
-    },
-    allRows() {
-      return Promise.resolve(
-        db
-          .prepare("SELECT collection, id, data FROM items")
-          .all() as { collection: string; id: string; data: string }[]
-      );
-    },
-    getRow(collection, id) {
-      return Promise.resolve(
-        db
-          .prepare("SELECT data FROM items WHERE collection = ? AND id = ?")
-          .get(collection, id) as { data: string } | undefined
-      );
-    },
-    insertRow(collection, id, data) {
-      db.prepare(
-        "INSERT OR IGNORE INTO items (collection, id, data) VALUES (?, ?, ?)"
-      ).run(collection, id, data);
-      return Promise.resolve();
-    },
-    upsertRow(collection, id, data) {
-      db.prepare(
-        "INSERT INTO items (collection, id, data) VALUES (?, ?, ?) ON CONFLICT(collection, id) DO UPDATE SET data = excluded.data"
-      ).run(collection, id, data);
-      return Promise.resolve();
-    },
-    updateRow(collection, id, data) {
-      db.prepare("UPDATE items SET data = ? WHERE collection = ? AND id = ?").run(
-        data,
-        collection,
-        id
-      );
-      return Promise.resolve();
-    },
-    deleteRow(collection, id) {
-      db.prepare("DELETE FROM items WHERE collection = ? AND id = ?").run(
-        collection,
-        id
-      );
-      return Promise.resolve();
-    },
-    countRows() {
-      const r = db.prepare("SELECT COUNT(*) AS c FROM items").get() as {
-        c: number;
-      };
-      return Promise.resolve(r.c);
-    },
-  };
+      },
+      getRow(collection, id) {
+        return Promise.resolve(
+          db
+            .prepare("SELECT data FROM items WHERE collection = ? AND id = ?")
+            .get(collection, id) as { data: string } | undefined
+        );
+      },
+      insertRow(collection, id, data) {
+        db.prepare(
+          "INSERT OR IGNORE INTO items (collection, id, data) VALUES (?, ?, ?)"
+        ).run(collection, id, data);
+        return Promise.resolve();
+      },
+      upsertRow(collection, id, data) {
+        db.prepare(
+          "INSERT INTO items (collection, id, data) VALUES (?, ?, ?) ON CONFLICT(collection, id) DO UPDATE SET data = excluded.data"
+        ).run(collection, id, data);
+        return Promise.resolve();
+      },
+      updateRow(collection, id, data) {
+        db.prepare("UPDATE items SET data = ? WHERE collection = ? AND id = ?").run(
+          data,
+          collection,
+          id
+        );
+        return Promise.resolve();
+      },
+      deleteRow(collection, id) {
+        db.prepare("DELETE FROM items WHERE collection = ? AND id = ?").run(
+          collection,
+          id
+        );
+        return Promise.resolve();
+      },
+      countRows() {
+        const r = db.prepare("SELECT COUNT(*) AS c FROM items").get() as {
+          c: number;
+        };
+        return Promise.resolve(r.c);
+      },
+    };
+  } catch (err) {
+    console.warn(`[storage] Could not initialize SQLite (${err}). Falling back to in-memory adapter.`);
+    return createMemoryAdapter();
+  }
 }
 
 /**
