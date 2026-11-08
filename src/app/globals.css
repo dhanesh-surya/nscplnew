@@ -1,28 +1,32 @@
 :root {
-  --brand: #0f766e;
-  --brand-dark: #0f3d39;
-  --brand-soft: #ecfdf5;
-  --accent: #f59e0b;
-  --ink: #0f172a;
-  --muted: #64748b;
-  --line: #e2e8f0;
-  --surface: #f8fafc;
+  --brand: #0A192F;
+  --brand-dark: #070F1E;
+  --brand-soft: #F1F5F9;
+  --accent: #FF5722;
+  --ink: #0F172A;
+  --muted: #64748B;
+  --line: #E2E8F0;
+  --surface: #FFFFFF;
   --card: var(--white);
   --white: #ffffff;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.18);
-  --shadow-sm: 0 4px 14px -8px rgba(15, 23, 42, 0.25);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.12);
+  --shadow-sm: 0 4px 14px -8px rgba(15, 23, 42, 0.18);
   --maxw: 1140px;
-  --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
+html, body {
   scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -41,6 +45,7 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -59,22 +64,26 @@ p {
   width: 100%;
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 clamp(16px, 4vw, 24px);
 }
 
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 22px;
+  min-height: 44px;
+  padding: 11px 22px;
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.95rem;
   border: 1px solid transparent;
   cursor: pointer;
+  touch-action: manipulation;
   transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
+.btn:active { transform: scale(0.98); }
 .btn:hover { transform: translateY(-1px); }
 .btn-primary { background: var(--brand); color: #fff; }
 .btn-primary:hover { background: var(--brand-dark); }
@@ -91,16 +100,40 @@ p {
    Scoped to a:not(.btn) so these theme rules don't repaint buttons
    (e.g. .btn-primary) — a bare `a` selector here would outrank .btn-primary
    and turn every primary button's text the brand colour. */
-html[data-links="hover"] a:not(.btn) { color: var(--brand); text-decoration: none; }
-html[data-links="hover"] a:not(.btn):hover { text-decoration: underline; }
-html[data-links="always"] a:not(.btn) { color: var(--brand); text-decoration: underline; }
-html[data-links="none"] a:not(.btn) { color: var(--brand); text-decoration: none; }
-html[data-links="none"] a:not(.btn):hover { text-decoration: none; }
+/* Links: how anchors are emphasised across the site content. */
+html[data-links="hover"] main a:not(.btn) { color: var(--accent, var(--brand)); text-decoration: none; }
+html[data-links="hover"] main a:not(.btn):hover { text-decoration: underline; }
+html[data-links="always"] main a:not(.btn) { color: var(--accent, var(--brand)); text-decoration: underline; }
+html[data-links="none"] main a:not(.btn) { color: var(--accent, var(--brand)); text-decoration: none; }
+html[data-links="none"] main a:not(.btn):hover { text-decoration: none; }
 
-/* Link & menu hover colour: a single, site-wide accent for the pointer/hover
-   state of every text link — content, footer, and the nav menu. Driven by the
-   --link-hover variable the root layout sets from the Site settings record. */
-html a:not(.btn):hover { color: var(--link-hover, var(--brand)); }
+/* Scoped Header & Footer Navigation Links (Immune to body link rules) */
+.site-header .nav a:not(.btn),
+html[data-links] .site-header .nav a:not(.btn) {
+  color: var(--header-fg, #FFFFFF) !important;
+}
+.site-header .nav a:not(.btn):hover,
+html[data-links] .site-header .nav a:not(.btn):hover {
+  color: var(--accent, #FF5722) !important;
+  background: rgba(255, 255, 255, 0.12);
+}
+.site-header .nav a.active,
+html[data-links] .site-header .nav a.active {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.site-footer a:not(.btn),
+html[data-links] .site-footer a:not(.btn) {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+.site-footer a:not(.btn):hover,
+html[data-links] .site-footer a:not(.btn):hover {
+  color: var(--accent, #FF5722) !important;
+}
+
+/* Link & menu hover colour */
+html main a:not(.btn):hover { color: var(--link-hover, var(--accent)); }
 
 /* Buttons: primary button treatment. */
 html[data-buttons="soft"] .btn-primary {
@@ -166,16 +199,16 @@ html[data-buttons="outline"] .btn-primary:hover {
   font-weight: 600;
   font-size: 0.92rem;
   line-height: 1;
-  color: var(--header-fg, var(--ink));
+  color: var(--header-fg, #FFFFFF);
   transition: color 0.18s ease, background 0.18s ease;
 }
 .nav a:not(.btn):hover {
-  color: var(--brand);
-  background: var(--brand-soft);
+  color: var(--accent, #FF5722);
+  background: rgba(255, 255, 255, 0.12);
 }
 .nav a.active {
-  color: var(--brand);
-  background: var(--brand-soft);
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* Caret on parents (pure CSS triangle that rotates when the menu opens) */
@@ -432,19 +465,35 @@ html[data-buttons="outline"] .btn-primary:hover {
   right: 0;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
 }
 .hero-dot {
-  width: 10px;
-  height: 10px;
+  position: relative;
+  width: 12px;
+  height: 12px;
   padding: 0;
   border-radius: 999px;
   border: none;
-  background: rgba(255,255,255,0.45);
+  background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
+  touch-action: manipulation;
+  transition: all 0.2s ease;
 }
-.hero-dot.is-active { background: #fff; transform: scale(1.25); }
+.hero-dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+}
+.hero-dot.is-active {
+  width: 26px;
+  background: #fff;
+  border-radius: 999px;
+}
 /* Motion-sensitive users: show the active slide without the sliding animation. */
 @media (prefers-reduced-motion: reduce) {
   .hero-track { transition: none; }
@@ -452,25 +501,25 @@ html[data-buttons="outline"] .btn-primary:hover {
 }
 
 /* ---------- Sections ---------- */
-.section { padding: 64px 0; }
+.section { padding: clamp(40px, 8vw, 64px) 0; }
 .section.alt { background: var(--surface); }
-.section-head { max-width: 60ch; margin-bottom: 36px; }
+.section-head { max-width: 60ch; margin-bottom: 32px; }
 .section-head .eyebrow {
   color: var(--brand);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
 }
-.section-head h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
-.section-head p { color: var(--muted); }
+.section-head h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
+.section-head p { color: var(--muted); font-size: 1rem; }
 
 /* ---------- Grids ---------- */
-.grid { display: grid; gap: 22px; }
+.grid { display: grid; gap: 20px; }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
-.grid-auto { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.grid-auto { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
 
 /* ---------- Cards ---------- */
 .card {
@@ -488,7 +537,7 @@ html[data-buttons="outline"] .btn-primary:hover {
 .card .body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .card .tag {
   align-self: flex-start;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--brand); background: var(--brand-soft);
   padding: 4px 10px; border-radius: 999px;
@@ -566,10 +615,10 @@ html[data-buttons="outline"] .btn-primary:hover {
 .form .err { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; }
 
 /* ---------- Footer ---------- */
-.site-footer { background: var(--brand-dark); color: rgba(255,255,255,0.85); padding: 54px 0 26px; }
-.site-footer h4 { color: #fff; font-size: 1rem; }
-.site-footer a { color: rgba(255,255,255,0.8); }
-.site-footer a:hover { color: #fff; }
+.site-footer { background: var(--brand-dark, #070F1E); color: rgba(255,255,255,0.85); padding: 54px 0 26px; }
+.site-footer h4 { color: #fff; font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; }
+.site-footer a { color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.15s ease; }
+.site-footer a:hover { color: var(--accent, #FF5722); transform: translateX(3px); }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 28px; }
 .footer-grid ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); margin-top: 34px; padding-top: 18px; font-size: 0.85rem; color: rgba(255,255,255,0.6); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import "bootstrap/dist/css/bootstrap-utilities.min.css";
 import "./globals.css";
 import { site } from "@/data/site";
 import { getSettings } from "@/lib/content";

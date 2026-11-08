@@ -1,8 +1,15 @@
+import { redirect } from "next/navigation";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
+import { getAdminSession } from "@/lib/admin/actions";
 
 export const metadata = { title: "Admin login" };
 
-export default function AdminLoginPage() {
+export default async function AdminLoginPage() {
+  // Already signed in? Skip the form and go straight to the dashboard, so the
+  // admin is only ever asked for credentials once. Logging out clears the
+  // cookie and brings them back here.
+  if (await getAdminSession()) redirect("/admin");
+
   return (
     <div
       style={{
@@ -18,12 +25,6 @@ export default function AdminLoginPage() {
           Sign in to manage site content.
         </p>
         <AdminLoginForm />
-        <p style={{ marginTop: 16, fontSize: ".85rem", color: "var(--muted)" }}>
-          Default dev credentials — <code>admin@nscpl.in</code> /{" "}
-          <code>nscpl@admin</code>. Set <code>ADMIN_EMAIL</code>,{" "}
-          <code>ADMIN_PASSWORD</code> and <code>ADMIN_SECRET</code> in{" "}
-          <code>.env.local</code> to override.
-        </p>
       </div>
     </div>
   );

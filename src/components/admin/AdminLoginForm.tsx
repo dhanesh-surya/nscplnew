@@ -12,7 +12,7 @@ export default function AdminLoginForm() {
 
       <div className="field">
         <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" required defaultValue="admin@nscpl.in" />
+        <input id="email" name="email" type="email" required />
       </div>
 
       <div className="field">

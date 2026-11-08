@@ -41,3 +41,4 @@ next-env.d.ts
 # local dev scratch (server logs, ad-hoc HTML verification dumps)
 *.log
 home_check.html
+/.smoke/
