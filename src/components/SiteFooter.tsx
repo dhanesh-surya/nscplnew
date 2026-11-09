@@ -69,9 +69,13 @@ export default async function SiteFooter() {
 
         <div className="footer-bottom">
           <span>
-            © {year} {footer.copyright || site.name}. All rights reserved.
+            © {year}{" "}
+            {footer.copyright
+              ? footer.copyright.toLowerCase().includes("rights reserved")
+                ? footer.copyright
+                : `${footer.copyright}. All rights reserved.`
+              : `${site.name}. All rights reserved.`}
           </span>
-          <span>Built with Next.js · A simpler portal for sport.</span>
         </div>
       </div>
     </footer>
