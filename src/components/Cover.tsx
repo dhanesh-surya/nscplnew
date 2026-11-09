@@ -9,6 +9,14 @@ interface CoverProps {
 }
 
 export default function Cover({ eyebrow, title, subtitle, image, children }: CoverProps) {
+  const subtitleNodes = subtitle
+    ? subtitle.split(/\n\s*\n/).map((p, i) => (
+        <p key={i} className={i === 0 ? "lead" : undefined} style={{ whiteSpace: "pre-line" }}>
+          {p}
+        </p>
+      ))
+    : null;
+
   if (image) {
     return (
       <section className="cover">
@@ -18,7 +26,7 @@ export default function Cover({ eyebrow, title, subtitle, image, children }: Cov
         <div className="container inner">
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}
           <h1>{title}</h1>
-          {subtitle && <p>{subtitle}</p>}
+          {subtitleNodes}
           {children}
         </div>
       </section>
@@ -34,7 +42,7 @@ export default function Cover({ eyebrow, title, subtitle, image, children }: Cov
           </span>
         )}
         <h1>{title}</h1>
-        {subtitle && <p>{subtitle}</p>}
+        {subtitleNodes}
         {children}
       </div>
     </section>

@@ -7,6 +7,7 @@ import type { CollectionKey } from "@/lib/content";
 import PageBlocksField from "./PageBlocksField";
 import ImageField from "./ImageField";
 import RepeaterField from "./RepeaterField";
+import MultiImageUploadField from "./MultiImageUploadField";
 
 function toFormValue(field: FieldDef, value: unknown): string {
   if (value === undefined || value === null) return "";
@@ -23,6 +24,15 @@ function Field({ field, value, collection }: { field: FieldDef; value: unknown; 
 
   if (collection === "pages" && field.name === "blocks") {
     return <PageBlocksField value={value} />;
+  }
+  if (field.type === "gallery") {
+    return (
+      <MultiImageUploadField
+        name={field.name}
+        id={id}
+        defaultValue={value as string[] | string}
+      />
+    );
   }
   if (field.type === "image") {
     return (

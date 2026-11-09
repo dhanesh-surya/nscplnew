@@ -551,7 +551,12 @@ export async function getStore(): Promise<ContentStore> {
 /* ---------------- Typed getters ---------------- */
 export const getEvents = async () => (await getStore()).events;
 export const getEvent = async (slug: string) =>
-  (await getStore()).events.find((e) => e.slug === slug);
+  (await getStore()).events.find(
+    (e) =>
+      e.slug === slug ||
+      (e.id !== undefined && String(e.id) === slug) ||
+      (slug === "inaugration-ceremony-nscpl" && (e.slug === "1" || String(e.id) === "1"))
+  );
 export const getSports = async () => (await getStore()).sports;
 export const getSport = async (slug: string) =>
   (await getStore()).sports.find((s) => s.slug === slug);

@@ -39,8 +39,16 @@ export interface Feature {
   icon: string;
 }
 
+export interface EventGalleryImage {
+  src: string;
+  caption?: string;
+}
+
+export type EventGalleryItem = string | EventGalleryImage;
+
 export interface EventItem {
   slug: string;
+  id?: string | number;
   title: string;
   category: string;
   date: string; // ISO date
@@ -51,6 +59,7 @@ export interface EventItem {
   body: string[];
   cover: string;
   highlights?: string[];
+  gallery?: EventGalleryItem[];
 }
 
 export interface SportItem {

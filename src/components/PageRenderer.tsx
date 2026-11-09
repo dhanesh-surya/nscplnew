@@ -53,22 +53,48 @@ function MoreLink({ block }: { block: PageBlock }) {
 }
 
 function CardItem({ item }: { item: PageBlockItem }) {
+  const isTeam = Boolean(item.image?.includes("/team/"));
   return (
-    <div className="feature">
-      {item.icon && <div className="ico">{item.icon}</div>}
+    <div className="feature" style={isTeam ? { textAlign: "center" } : undefined}>
+      {item.icon && <div className="ico" style={isTeam ? { margin: "0 auto 14px" } : undefined}>{item.icon}</div>}
       {item.image && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={item.image}
-          alt=""
-          style={{ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 8, marginBottom: 12 }}
+          alt={item.title || ""}
+          style={
+            isTeam
+              ? {
+                  width: 120,
+                  height: 120,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  margin: "0 auto 16px",
+                  display: "block",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                }
+              : {
+                  width: "100%",
+                  aspectRatio: "16 / 9",
+                  objectFit: "contain",
+                  background: "rgba(0,0,0,0.02)",
+                  borderRadius: 8,
+                  marginBottom: 12,
+                  padding: 8,
+                }
+          }
         />
       )}
       <h3>{item.title}</h3>
-      <p style={{ color: "var(--muted)" }}>{item.body}</p>
+      <p style={{ color: "var(--muted)", whiteSpace: "pre-line" }}>{item.body}</p>
       {item.href && (
-        <Link className="btn btn-ghost" href={item.href}>
-          Learn more →
+        <Link
+          className="btn btn-ghost"
+          href={item.href}
+          target={item.href.startsWith("http") ? "_blank" : undefined}
+          rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+        >
+          {item.href.startsWith("mailto:") ? "Contact" : "Learn more →"}
         </Link>
       )}
     </div>

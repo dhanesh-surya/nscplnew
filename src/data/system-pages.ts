@@ -90,76 +90,137 @@ function aboutBlocks(): PageBlock[] {
       id: "about-hero",
       type: "hero",
       eyebrow: "About us",
-      title: "We make sport happen",
+      title: "About NSCPL",
       subtitle:
-        "NSCPL Private Limited is a sports and event management company built on a simple belief: great competition should be well organised, inclusive and fun.",
-      src: "/covers/athletics-meet.svg",
+        "NSCPL (NSCPL PRIVATE LIMITED) is dedicated to excellence in sports and event management. We focus on fostering athletic talent, organizing competitive events, and building community engagement through professional sports services.\n\nOur mission is to deliver top-tier sporting experiences and create opportunities for athletes to grow and succeed.",
+      src: "/media/themes/601790.jpg",
     },
     {
-      id: "about-story",
-      type: "richText",
-      eyebrow: "Our story",
-      title: "From one league to a movement",
-      subtitle:
-        "What started as a neighbourhood cricket competition is now a multi-sport platform connecting athletes, clubs and communities.",
-      body:
-        "For over a decade we have planned, promoted and delivered leagues, cups and community programmes across India. Our team handles the parts that make or break an event — scheduling, venues, officials, live scores and the little touches that turn a matchday into a memory.\n\nWe work with schools, academies, corporate HR teams and local clubs. Some come for a one-off tournament; many stay for a season. Either way, our job is the same: take the stress out of sport so the people on the field can simply play.",
-    },
-    {
-      id: "about-stats",
-      type: "stats",
-      sectionAlt: true,
-      eyebrow: "By the numbers",
-      title: "A decade of impact",
-      entries: stats.map((s) => ({ label: s.label, value: s.value, hint: s.hint })),
-    },
-    {
-      id: "about-values",
+      id: "about-purpose",
       type: "cards",
-      eyebrow: "What we value",
-      title: "The principles behind every event",
+      eyebrow: "Our Purpose",
+      title: "Vision & Mission",
       columns: "2",
       items: [
         {
-          title: "Organisation you can trust",
-          body: "Clear schedules, neutral officiating and transparent communication on every event we run.",
+          title: "Vision",
+          body: "To become a leading force in the world of sports by nurturing talent, inspiring passion, and creating global opportunities through world-class tournaments, events, and sporting excellence across multiple disciplines.",
+          icon: "👁️",
         },
         {
-          title: "Opportunity for all",
-          body: "From schoolyards to corporate cups, we design formats where everyone has a place to compete.",
-        },
-        {
-          title: "Community over everything",
-          body: "Clubs, fans and volunteers are the reason our events keep growing. We protect that spirit.",
-        },
-        {
-          title: "Quality experiences",
-          body: "Thoughtful venues, live updates and a smooth matchday — the details players remember.",
+          title: "Mission",
+          body: "• To promote, organize, and manage cricket and other sports events at national and international levels, fostering sportsmanship and competitive spirit.\n• To support and develop diverse sporting activities such as football, kabaddi, hockey, badminton, volleyball, tennis, athletics, and e-sports, encouraging participation and excellence.\n• To deliver comprehensive sports event management solutions including branding, marketing, ticketing, broadcasting, merchandising, and franchising that elevate the experience for players, fans, and partners alike.\n• To build sustainable platforms that connect athletes, organizations, and audiences, driving the growth of sports culture and industry in India and beyond.",
+          icon: "🎯",
         },
       ],
     },
     {
-      id: "about-milestones",
+      id: "about-values",
       type: "cards",
       sectionAlt: true,
-      eyebrow: "Milestones",
-      title: "How we got here",
+      eyebrow: "Principles",
+      title: "Our Values",
+      columns: "3",
+      items: [
+        {
+          title: "Collaboration",
+          body: "We work with collaborate",
+          icon: "⭐",
+        },
+        {
+          title: "Integrity",
+          body: "We uphold the highest ethical standards in all our actions and decisions.",
+          icon: "🛡️",
+        },
+        {
+          title: "Innovation",
+          body: "We embrace creativity and cutting-edge solutions to drive progress.",
+          icon: "💡",
+        },
+        {
+          title: "Collaboration",
+          body: "We work together as a unified team to achieve common goals.",
+          icon: "👥",
+        },
+        {
+          title: "Excellence",
+          body: "We strive for excellence in everything we do, setting high standards for ourselves and others.",
+          icon: "🏆",
+        },
+        {
+          title: "Respect",
+          body: "We treat everyone with dignity, respect, and fairness in all our interactions.",
+          icon: "🤝",
+        },
+      ],
+    },
+    {
+      id: "about-recognition",
+      type: "cards",
+      eyebrow: "Accreditations",
+      title: "Recognition & Achievements",
       columns: "2",
       items: [
-        { title: "2014", body: "NSCPL founded with a single local cricket league." },
-        { title: "2017", body: "Expanded into football and athletics across three cities." },
-        { title: "2021", body: "Launched the national 3x3 basketball circuit." },
-        { title: "2026", body: "Crossed 9,000 registered players and 320 events delivered." },
+        {
+          title: "PVT LTD",
+          body: "Official company recognition and portal.",
+          image: "/media/recognition/nscpl_logo_com.png",
+          href: "http://nscplcg.in",
+        },
+        {
+          title: "MCA",
+          body: "Ministry of Corporate Affairs (MCA) registered.",
+          image: "/media/recognition/Screenshot_2025-10-23_203959.png",
+          href: "https://www.falconebiz.com/company/NSCPL-PRIVATE-LIMITED-U74900CT2025PTC018395",
+        },
+      ],
+    },
+    {
+      id: "about-team",
+      type: "cards",
+      sectionAlt: true,
+      eyebrow: "Leadership",
+      title: "Our Team",
+      subtitle:
+        "Meet the dedicated professionals behind our success. We are proud to have a team of passionate individuals who work tirelessly to deliver exceptional results.",
+      columns: "auto",
+      items: [
+        {
+          title: "Sunita",
+          body: "Director\nnareshsunita55@gmail.com",
+          image: "/media/about/team/WhatsApp_Image_2025-10-24_at_4.48.42_PM.jpeg",
+          href: "mailto:nareshsunita55@gmail.com",
+        },
+        {
+          title: "Naresh Nirala",
+          body: "Director\nnareshnirala212@gmail.com",
+          image: "/media/about/team/WhatsApp_Image_2025-10-24_at_4.48.41_PM.jpeg",
+          href: "mailto:nareshnirala212@gmail.com",
+        },
+        {
+          title: "Chandrashekhar",
+          body: "Marketing Manager\ncnauratna@gmail.com",
+          image: "/media/about/team/WhatsApp_Image_2025-10-24_at_4.48.42_PM_2.jpeg",
+          href: "mailto:cnauratna@gmail.com",
+        },
+        {
+          title: "Bhisam Nauratn",
+          body: "CEO\nbnauratn@gmail.com",
+          image: "/media/about/team/WhatsApp_Image_2025-10-24_at_4.48.42_PM_1.jpeg",
+          href: "mailto:bnauratn@gmail.com",
+        },
       ],
     },
     {
       id: "about-cta",
       type: "cta",
       centered: true,
-      title: "Want to run an event with us?",
-      body: "Tell us what you have in mind — we'll help shape it into something your players will love.",
-      primaryLabel: "Start a conversation",
+      title: "Ready to Get Started?",
+      body: "Join us in promoting sports excellence and community engagement.",
+      primaryLabel: "Contact Us",
       primaryHref: "/contact",
+      secondaryLabel: "View Events",
+      secondaryHref: "/events",
     },
   ];
 }
@@ -181,14 +242,15 @@ export function homePage(): PageItem {
 export function aboutPage(): PageItem {
   return {
     slug: "about",
-    title: "About",
+    title: "About Us",
     excerpt:
-      "A sports and event management company built on a simple belief: great competition should be well organised, inclusive and fun.",
+      "NSCPL (NSCPL PRIVATE LIMITED) is dedicated to excellence in sports and event management. We focus on fostering athletic talent, organizing competitive events, and building community engagement through professional sports services.",
+    cover: "/media/themes/601790.jpg",
     status: "published",
     blocks: aboutBlocks(),
-    seoTitle: "About NSCPL",
+    seoTitle: "About Us - NSCPL PRIVATE LIMITED",
     seoDescription:
-      "From one local cricket league to a multi-sport platform connecting athletes, clubs and communities across India.",
+      "NSCPL (NSCPL PRIVATE LIMITED) is dedicated to excellence in sports and event management. We focus on fostering athletic talent, organizing competitive events, and building community engagement through professional sports services.",
     updatedAt: now(),
     system: true,
   };

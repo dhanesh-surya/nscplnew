@@ -9,13 +9,17 @@ const DEFAULT_COVER = "/covers/placeholder.svg";
 export function EventCard({ event }: { event: EventItem }) {
   return (
     <article className="card">
-      <div className="media">
+      <Link href={`/events/${event.slug}`} className="media" style={{ display: "block" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={event.cover || DEFAULT_COVER} alt={event.title} />
-      </div>
+      </Link>
       <div className="body">
         <span className="tag">{event.category}</span>
-        <h3>{event.title}</h3>
+        <h3>
+          <Link href={`/events/${event.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
+            {event.title}
+          </Link>
+        </h3>
         <p>{event.summary}</p>
         <div className="meta">
           <span>📅 {formatDate(event.date)}</span>
@@ -23,7 +27,7 @@ export function EventCard({ event }: { event: EventItem }) {
         </div>
         <div className="meta">
           <span className={`pill pill-${event.status}`}>● {statusLabel(event.status)}</span>
-          <Link className="more" href={`/events/${event.slug}`}>View event →</Link>
+          <Link className="more" href={`/events/${event.slug}`}>View Details →</Link>
         </div>
       </div>
     </article>

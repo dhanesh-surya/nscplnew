@@ -29,7 +29,7 @@ export function statusLabel(status: string): string {
     case "closed":
       return "Registration closed";
     case "past":
-      return "Completed";
+      return "Past Event";
     default:
       return status;
   }

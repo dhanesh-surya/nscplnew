@@ -12,7 +12,9 @@ export type FieldType =
   | /** Text field backed by a real file upload; the file wins over the path. */
   "image"
   | /** Repeatable group of inputs stored as an array of objects (JSON). */
-  "repeater";
+  "repeater"
+  | /** Multi-image gallery uploader storing an array of image URLs/paths. */
+  "gallery";
 
 /** One input inside a `repeater` row. */
 export interface SubFieldDef {
@@ -79,6 +81,12 @@ export const schemas: Record<CollectionKey, CollectionSchema> = {
         help: "Upload an image file, or paste an existing path/URL such as /covers/cricket-league.svg. An uploaded file replaces the path.",
       },
       { name: "highlights", label: "Highlights (one per line)", type: "lines" },
+      {
+        name: "gallery",
+        label: "Event Photo Gallery (Multiple Photos & Captions)",
+        type: "gallery",
+        help: "Upload multiple photos, arrange order, and add captions for this event. These appear in the Event Gallery on the event details page.",
+      },
     ],
   },
   sports: {

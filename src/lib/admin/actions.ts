@@ -12,7 +12,7 @@ import {
   upsertItem,
 } from "@/lib/content";
 import { schemas } from "./schema";
-import { saveCoverAsset, saveUploadedFile } from "./uploads";
+import { saveAssetFile, saveCoverAsset, saveUploadedFile } from "./uploads";
 
 const COOKIE = "portal_admin";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -154,6 +154,83 @@ export async function saveItemAction(
       const path = String(form.get(field.name) ?? "").trim();
       if (field.required && !path) return;
       obj[field.name] = path;
+      continue;
+    }
+
+    if (field.type === "gallery") {
+      const metaRaw = String(form.get(`${field.name}__meta`) ?? "");
+      const files = form.getAll(`${field.name}__files`);
+
+      if (metaRaw) {
+        let metaList: Array<{
+          type: "existing" | "new";
+          src?: string;
+          fileIndex?: number;
+          caption?: string;
+        }> = [];
+        try {
+          const parsed = JSON.parse(metaRaw);
+          if (Array.isArray(parsed)) metaList = parsed;
+        } catch {
+          metaList = [];
+        }
+
+        const resultGallery: Array<{ src: string; caption?: string }> = [];
+
+        for (const item of metaList) {
+          const caption = (item.caption || "").trim();
+          if (item.type === "new" && typeof item.fileIndex === "number") {
+            const file = files[item.fileIndex];
+            if (file instanceof File && file.size > 0) {
+              try {
+                const savedPath = await saveAssetFile(
+                  `${collection}/${itemId}/gallery`,
+                  file
+                );
+                resultGallery.push({
+                  src: savedPath,
+                  ...(caption ? { caption } : {}),
+                });
+              } catch (err) {
+                console.error("[uploads] Failed to save gallery file:", err);
+              }
+            }
+          } else if (item.src) {
+            resultGallery.push({
+              src: item.src,
+              ...(caption ? { caption } : {}),
+            });
+          }
+        }
+
+        obj[field.name] = resultGallery;
+        continue;
+      }
+
+      const existingRaw = String(form.get(`${field.name}__existing`) ?? "[]");
+      let existingUrls: string[] = [];
+      try {
+        existingUrls = JSON.parse(existingRaw);
+      } catch {
+        existingUrls = [];
+      }
+
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        if (file instanceof File && file.size > 0) {
+          try {
+            const savedPath = await saveAssetFile(
+              `${collection}/${itemId}/gallery`,
+              file
+            );
+            uploadedUrls.push(savedPath);
+          } catch (err) {
+            console.error("[uploads] Failed to save gallery file:", err);
+          }
+        }
+      }
+
+      obj[field.name] = [...existingUrls, ...uploadedUrls];
       continue;
     }
 

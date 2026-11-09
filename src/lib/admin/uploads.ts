@@ -44,7 +44,7 @@ export async function saveCoverAsset(
   return saveAssetFile(`covers/${collection}/${slug || "misc"}`, file);
 }
 
-async function saveAssetFile(namespace: string, file: File): Promise<string> {
+export async function saveAssetFile(namespace: string, file: File): Promise<string> {
   const bytes = Buffer.from(await file.arrayBuffer());
   if (bytes.length === 0) throw new Error("Empty file");
 
