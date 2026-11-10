@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { COLLECTIONS, getStore } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export const metadata = { title: "Admin dashboard" };
 
 export default async function AdminDashboard() {

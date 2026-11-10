@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "./actions";
 import { saveCoverAsset } from "./uploads";
 import { upsertItem } from "@/lib/content";
@@ -99,6 +100,8 @@ export async function saveSettingsAction(form: FormData): Promise<void> {
     // each GalleryImage record by saveGalleryAction.
 
     await upsertItem("settings", obj as unknown as Record<string, unknown>);
+    revalidatePath("/", "layout");
+    revalidatePath("/admin/settings");
     redirect("/admin/settings");
   } catch (err) {
     if (err && typeof err === "object" && "digest" in err && String((err as { digest?: unknown }).digest).startsWith("NEXT_REDIRECT")) throw err;
@@ -137,22 +140,24 @@ export async function saveFooterAction(form: FormData): Promise<void> {
 
     const obj: Record<string, unknown> = {
       id: "main",
-      brand: String(form.get("brand") ?? base.brand).trim() || base.brand,
-      about: String(form.get("about") ?? base.about).trim() || base.about,
-      columns: columns.length ? columns : base.columns,
+      brand: String(form.get("brand") ?? "").trim() || base.brand,
+      about: String(form.get("about") ?? "").trim() || base.about,
+      columns,
       contact: {
-        email: String(form.get("contact_email") ?? base.contact.email).trim(),
-        phone: String(form.get("contact_phone") ?? base.contact.phone).trim(),
-        address: String(form.get("contact_address") ?? base.contact.address).trim(),
-        city: String(form.get("contact_city") ?? base.contact.city).trim(),
+        email: String(form.get("contact_email") ?? "").trim(),
+        phone: String(form.get("contact_phone") ?? "").trim(),
+        address: String(form.get("contact_address") ?? "").trim(),
+        city: String(form.get("contact_city") ?? "").trim(),
       },
       copyright:
-        String(form.get("copyright") ?? base.copyright).trim() || base.copyright,
-      social: social.length ? social : base.social,
-      mapEmbed: String(form.get("mapEmbed") ?? base.mapEmbed).trim() || base.mapEmbed,
+        String(form.get("copyright") ?? "").trim() || base.copyright,
+      social,
+      mapEmbed: String(form.get("mapEmbed") ?? "").trim(),
     };
 
     await upsertItem("footer", obj);
+    revalidatePath("/", "layout");
+    revalidatePath("/admin/footer");
     redirect("/admin/footer");
   } catch (err) {
     if (err && typeof err === "object" && "digest" in err && String((err as { digest?: unknown }).digest).startsWith("NEXT_REDIRECT")) throw err;

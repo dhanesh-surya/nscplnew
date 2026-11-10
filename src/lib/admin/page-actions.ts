@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "./actions";
 import { saveCoverAsset, savePageAsset } from "./uploads";
 import { getAllPages, upsertItem } from "@/lib/content";
@@ -69,6 +70,9 @@ export async function savePageAction(
       system: existing?.system ?? false,
     };
     await upsertItem("pages", page as unknown as Record<string, unknown>);
+    revalidatePath("/", "layout");
+    revalidatePath("/admin/pages");
+    revalidatePath(`/${slug}`);
     redirect("/admin/pages");
   } catch (err) {
     if (err && typeof err === "object" && "digest" in err && String((err as { digest?: unknown }).digest).startsWith("NEXT_REDIRECT")) throw err;

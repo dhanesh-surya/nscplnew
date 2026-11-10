@@ -1,6 +1,8 @@
 import FooterForm from "@/components/admin/FooterForm";
 import { getFooter } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export const metadata = { title: "Footer" };
 
 export default async function AdminFooterPage() {
@@ -12,7 +14,10 @@ export default async function AdminFooterPage() {
         Edit the footer brand, about text, link columns, contact details, and social
         links shown on every page.
       </p>
-      <FooterForm values={footer} />
+      {/* Key on the serialized footer so the form (and its useState
+          fields) fully remounts after a save+redirect and reflects the new values,
+          instead of showing stale state. */}
+      <FooterForm key={JSON.stringify(footer)} values={footer} />
     </div>
   );
 }

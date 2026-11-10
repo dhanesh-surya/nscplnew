@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { COLLECTIONS, getStore, type CollectionKey } from "@/lib/content";
 import DeleteButton from "@/components/admin/DeleteButton";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function CollectionList({
   params,
 }: {

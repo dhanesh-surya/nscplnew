@@ -5,6 +5,9 @@ import MenuItemForm from "@/components/admin/MenuItemForm";
 import { COLLECTIONS, getAllPages, getStore } from "@/lib/content";
 import { schemas } from "@/lib/admin/schema";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NewItem({
   params,
 }: {

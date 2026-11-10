@@ -4,6 +4,9 @@ import GalleryItemForm from "@/components/admin/GalleryItemForm";
 import MenuItemForm from "@/components/admin/MenuItemForm";
 import { COLLECTIONS, getAllPages, getStore, type CollectionKey } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EditItem({
   params,
 }: {

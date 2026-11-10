@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import {
@@ -113,6 +114,8 @@ export async function saveMenuItemAction(
     order: Number.isFinite(orderRaw) ? orderRaw : 0,
     visible: form.get("visible") === "on",
   });
+  revalidatePath("/", "layout");
+  revalidatePath("/admin/menu");
   redirect("/admin/menu");
 }
 
@@ -269,6 +272,10 @@ export async function saveItemAction(
   obj[idField] = itemId;
 
   await upsertItem(collection, obj);
+  revalidatePath("/", "layout");
+  revalidatePath(`/${collection}`);
+  revalidatePath(`/${collection}/${itemId}`);
+  revalidatePath(`/admin/${collection}`);
   redirect(`/admin/${collection}`);
 }
 
@@ -278,6 +285,9 @@ export async function deleteItemAction(
 ): Promise<void> {
   await requireAdmin();
   await deleteItem(collection, id);
+  revalidatePath("/", "layout");
+  revalidatePath(`/${collection}`);
+  revalidatePath(`/admin/${collection}`);
   redirect(`/admin/${collection}`);
 }
 
@@ -350,6 +360,9 @@ export async function saveGalleryAction(
     };
 
     await upsertItem("gallery", obj);
+    revalidatePath("/", "layout");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
     return {};
   } catch (err) {
     return {

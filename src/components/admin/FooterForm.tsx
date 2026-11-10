@@ -18,6 +18,8 @@ function emptyColumn(): ColumnRow {
 export default function FooterForm({ values }: { values: SiteFooterData }) {
   const [brand, setBrand] = useState(values.brand ?? "");
   const [about, setAbout] = useState(values.about ?? "");
+  const [copyright, setCopyright] = useState(values.copyright ?? "");
+  const [mapEmbed, setMapEmbed] = useState(values.mapEmbed ?? "");
   const [columns, setColumns] = useState<ColumnRow[]>(
     values.columns?.length ? values.columns : [emptyColumn()]
   );
@@ -30,10 +32,6 @@ export default function FooterForm({ values }: { values: SiteFooterData }) {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Serialise the nested structures into the hidden fields just before submit so
-  // the server action receives clean JSON in the FormData. We do not prevent
-  // default — the native form submission to the server action picks up the
-  // populated hidden fields.
   function syncHidden() {
     const form = formRef.current;
     if (!form) return;
@@ -97,8 +95,8 @@ export default function FooterForm({ values }: { values: SiteFooterData }) {
 
   return (
     <form ref={formRef} action={saveFooterAction} onSubmit={syncHidden}>
-      <input type="hidden" name="columns" />
-      <input type="hidden" name="social" />
+      <input type="hidden" name="columns" value={JSON.stringify(columns)} readOnly />
+      <input type="hidden" name="social" value={JSON.stringify(social)} readOnly />
 
       <div
         style={{
@@ -113,7 +111,13 @@ export default function FooterForm({ values }: { values: SiteFooterData }) {
         </div>
         <div className="field">
           <label htmlFor="f_copyright">Copyright line</label>
-          <input id="f_copyright" type="text" name="copyright" defaultValue={values.copyright ?? ""} />
+          <input
+            id="f_copyright"
+            type="text"
+            name="copyright"
+            value={copyright}
+            onChange={(e) => setCopyright(e.target.value)}
+          />
         </div>
       </div>
 
@@ -310,7 +314,8 @@ export default function FooterForm({ values }: { values: SiteFooterData }) {
         <input
           type="text"
           name="mapEmbed"
-          defaultValue={values.mapEmbed ?? ""}
+          value={mapEmbed}
+          onChange={(e) => setMapEmbed(e.target.value)}
           placeholder="https://www.google.com/maps/embed?pb=..."
         />
       </div>
